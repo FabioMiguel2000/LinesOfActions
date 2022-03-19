@@ -42,6 +42,9 @@ class Game:
         piece = self.board.get_piece(row, col)
         
         if self.selected and (row,col) in self.valid_moves:
+            if(piece != 0):
+                self.board.remove(piece)
+            
             print("MOVE")
             self.board.move(self.selected, row, col)
             self.change_turn()

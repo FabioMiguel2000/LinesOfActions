@@ -8,7 +8,7 @@ class Board:
     def __init__(self):
         self.board = []
         self.selected_piece = None
-        self.white_left = self.black_left = 12
+        self.blue_left = self.red_left = 12
         
         self.create_board()
         
@@ -47,6 +47,15 @@ class Board:
                 piece = self.board[row][col]
                 if(piece!=0):
                     piece.draw(window)
+                    
+    def remove(self, piece):
+        self.board[piece.row][piece.col] = 0
+        
+        if piece != 0:
+            if piece.color == RED:
+                self.red_left -=1
+            else:
+                self.blue_left -=1
                     
     def move(self, piece, row, col):
         self.board[piece.row][piece.col], self.board[row][col] = self.board[row][col],self.board[piece.row][piece.col]
