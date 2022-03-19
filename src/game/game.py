@@ -28,14 +28,12 @@ class Game:
                 self.selected = None
                 self.select(row,col)
         
-        # precisa de else??
-        else:        
-            piece = self.board.get_piece(row,col)
-            if piece != 0 and piece.color == self.turn:
-                self.selected = piece
-                self.valid_moves = self.board.get_valid_moves(piece)
+        piece = self.board.get_piece(row,col)
+        if piece != 0 and piece.color == self.turn:
+            self.selected = piece
+            self.valid_moves = self.board.get_valid_moves(piece)
                 
-                return True
+            return True
         
         return False
                 
