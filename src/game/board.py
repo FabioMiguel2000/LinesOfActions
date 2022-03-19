@@ -1,7 +1,7 @@
 from re import S
 import pygame
-from game.constants import *
-from game.piece import *
+from .constants import *
+from .piece import *
 
 
 class Board:
