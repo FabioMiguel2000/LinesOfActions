@@ -1,6 +1,6 @@
 import pygame
 from game.constants import *
-from game.board import Board
+from game.game import Game
 
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
 
@@ -18,7 +18,7 @@ def get_row_col_from_mouse(pos):
 def main():
     run = True
     clock = pygame.time.Clock()
-    board = Board()
+    game = Game(WINDOW)
     
     # piece = board.get_piece(0,1)
     # 
@@ -33,12 +33,11 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
                 row, col = get_row_col_from_mouse(pos)
-                piece = board.get_piece(row,col)
                 
-                board.move(piece, 4,4)
+                game.select(row, col)
+
             
-        board.draw(WINDOW)
-        pygame.display.update()
+        game.update()
                 
     pygame.quit()
     

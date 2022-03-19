@@ -25,7 +25,7 @@ class Board:
         for row in range(ROWS):
             self.board.append([])
             for col in range(COLS):
-                print(row, col)
+                #print(row, col)
                 if (col == 0 or col == COLS-1) and row!=0 and row != ROWS-1 :
                     self.board[row].append(Piece(row,col, BLUE))
                 
@@ -49,3 +49,10 @@ class Board:
         
     def get_piece(self, row, col):
         return self.board[row][col]
+    
+    def get_valid_moves(self, piece):
+        moves = {}
+        
+        
+        
+        return moves
