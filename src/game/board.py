@@ -87,25 +87,26 @@ class Board:
     def move_horizontal(self, piece, moves, hor_moves):
         positiveValidMove = True
         negativeValidMove = True
-        for i in range (1,hor_moves):
+        for i in range (1, hor_moves+1 ):
             temp1 = self.get_piece(piece.row,piece.col+i)
             temp2 = self.get_piece(piece.row,piece.col-i)
             
             # Other color piece blocking our play
-            if(temp1 != 0  and piece.color != temp1.color):
-                positiveValidMove = False
+            if i != hor_moves:
+                if(  temp1 != 0  and piece.color != temp1.color):
+                    positiveValidMove = False
+                
+                if( temp2 != 0  and piece.color != temp2.color):
+                    negativeValidMove = False
             
-            if(temp2 != 0  and piece.color != temp2.color):
-                negativeValidMove = False
-        
-        # Para impedir comer uma peça da propria cor na ultima posiçao
-        # Caso contrario podemos "saltar" por cima delas por isso não há problema :) 
-        temp1 = self.get_piece(piece.row,piece.col+hor_moves)        
-        temp2 = self.get_piece(piece.row,piece.col-hor_moves)        
-        if temp1 != 0 and temp1.color == piece.color:
-            positiveValidMove = False
-        if temp2 != 0 and temp2.color == piece.color:
-            negativeValidMove = False
+             # Para impedir comer uma peça da propria cor na ultima posiçao
+             # Caso contrario podemos "saltar" por cima delas por isso não há problema :)   
+            else:    
+                if temp1 != 0 and temp1.color == piece.color:
+                    positiveValidMove = False
+                    
+                if temp2 != 0 and temp2.color == piece.color:
+                    negativeValidMove = False
 
         if( positiveValidMove):
             moves.append( (piece.row, piece.col + hor_moves) )
@@ -119,24 +120,22 @@ class Board:
         positiveValidMove = True
         negativeValidMove = True
         
-        for i in range (1, ver_moves):
+        for i in range (1, ver_moves +1 ):
             temp1 = self.get_piece(piece.row+i,piece.col)
             temp2 = self.get_piece(piece.row-i,piece.col)
             
-            if temp1 != 0 and temp1.color != piece.color:
-                positiveValidMove = False
-            
-            if temp2 != 0 and temp2.color != piece.color:
-                negativeValidMove = False
-
-        temp1 = self.get_piece(piece.row + ver_moves,piece.col)        
-        temp2 = self.get_piece(piece.row - ver_moves,piece.col)
-        
-        if temp1 != 0 and temp1.color == piece.color:
-            positiveValidMove = False
-        
-        if temp2 != 0 and temp2.color == piece.color:
-            negativeValidMove = False
+            if i != ver_moves:
+                if temp1 != 0 and temp1.color != piece.color:
+                    positiveValidMove = False
+                
+                if temp2 != 0 and temp2.color != piece.color:
+                    negativeValidMove = False
+            else:
+                if temp1 != 0 and temp1.color == piece.color:
+                    positiveValidMove = False
+                
+                if temp2 != 0 and temp2.color == piece.color:
+                    negativeValidMove = False
 
         if( positiveValidMove ):
             moves.append( (piece.row + ver_moves, piece.col) )
