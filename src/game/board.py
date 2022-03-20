@@ -62,7 +62,9 @@ class Board:
         piece.move(row,col)
         
     def get_piece(self, row, col):
-        return self.board[row][col]
+        if( 0 <= col  < COLS and 0 <= row  < ROWS):
+            return self.board[row][col]
+        return 0
     
     def get_valid_moves(self, piece):
         moves = []
@@ -88,12 +90,30 @@ class Board:
         return moves
     
     def move_horizontal(self, piece, moves, hor_moves):
+        positiveValidMove = True
+        negativeValidMove = True
+        for i in range (1,hor_moves-1):
+            temp1 = self.get_piece(piece.row,piece.col+i)
+            temp2 = self.get_piece(piece.row,piece.col-i)
+            
+            if(temp1 != 0  and piece.color != temp1.color):
+                positiveValidMove = False
+            
+            if(temp2 != 0  and piece.color != temp2.color):
+                negativeValidMove = False
+        
+        temp1 = self.get_piece(piece.row,piece.col+hor_moves)        
+        temp2 = self.get_piece(piece.row,piece.col-hor_moves)        
+        if temp1 != 0 and temp1.color == piece.color:
+            positiveValidMove = False
+        if temp2 != 0 and temp2.color == piece.color:
+            negativeValidMove = False
 
-        if( 0 <= piece.col + hor_moves <= COLS ):
+        if( positiveValidMove):
             moves.append( (piece.row, piece.col + hor_moves) )
             #print("ENTREI ", piece.row, piece.col + hor_moves)
         
-        if( 0 <= piece.col - hor_moves <= COLS ):
+        if( negativeValidMove ):
             moves.append( (piece.row, piece.col - hor_moves) )
             #print("ENTREI ", piece.row, piece.col - hor_moves)
             
