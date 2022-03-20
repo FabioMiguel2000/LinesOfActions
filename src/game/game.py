@@ -20,7 +20,7 @@ class Game:
         self.valid_moves = {}
         
     def select(self, row, col):
-        print("SELECT ", row, col)
+        #print("SELECT ", row, col)
         if self.selected: 
             result = self.move(row,col)
             
@@ -45,7 +45,7 @@ class Game:
             if(piece != 0):
                 self.board.remove(piece)
             
-            print("MOVE")
+            #print("MOVE")
             self.board.move(self.selected, row, col)
             self.change_turn()
 

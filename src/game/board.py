@@ -21,11 +21,6 @@ class Board:
             for col in range(row % 2, ROWS , 2): # Paint every other square
                 pygame.draw.rect(window, BLACK, (row*SQUARE_SIZE, col*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE) )
 
-    # Fiz um bocado à trolha, dá para melhorar isto
-    # acho que basta 1 CICLO FOR pq queremos criar nas casas
-    # AZUIS (0,1), (0,2)... 
-    # VERMELHAS (1,0), (2,0)
-    # E o contrario para o lado de baixo e direita  
     def create_board(self): 
         for row in range(ROWS):
             self.board.append([])
@@ -92,16 +87,19 @@ class Board:
     def move_horizontal(self, piece, moves, hor_moves):
         positiveValidMove = True
         negativeValidMove = True
-        for i in range (1,hor_moves-1):
+        for i in range (1,hor_moves):
             temp1 = self.get_piece(piece.row,piece.col+i)
             temp2 = self.get_piece(piece.row,piece.col-i)
             
+            # Other color piece blocking our play
             if(temp1 != 0  and piece.color != temp1.color):
                 positiveValidMove = False
             
             if(temp2 != 0  and piece.color != temp2.color):
                 negativeValidMove = False
         
+        # Para impedir comer uma peça da propria cor na ultima posiçao
+        # Caso contrario podemos "saltar" por cima delas por isso não há problema :) 
         temp1 = self.get_piece(piece.row,piece.col+hor_moves)        
         temp2 = self.get_piece(piece.row,piece.col-hor_moves)        
         if temp1 != 0 and temp1.color == piece.color:
@@ -118,11 +116,30 @@ class Board:
             #print("ENTREI ", piece.row, piece.col - hor_moves)
             
     def move_vertical(self, piece, moves, ver_moves):
-
-        if( 0 <= piece.row + ver_moves <= ROWS ):
-            moves.append( (piece.row + ver_moves, piece.col) )
-            print("ENTREI ", piece.row  + ver_moves, piece.col)
+        positiveValidMove = True
+        negativeValidMove = True
         
-        if( 0 <= piece.row - ver_moves <= ROWS ):
+        for i in range (1, ver_moves):
+            temp1 = self.get_piece(piece.row+i,piece.col)
+            temp2 = self.get_piece(piece.row-i,piece.col)
+            
+            if temp1 != 0 and temp1.color != piece.color:
+                positiveValidMove = False
+            
+            if temp2 != 0 and temp2.color != piece.color:
+                negativeValidMove = False
+
+        temp1 = self.get_piece(piece.row + ver_moves,piece.col)        
+        temp2 = self.get_piece(piece.row - ver_moves,piece.col)
+        
+        if temp1 != 0 and temp1.color == piece.color:
+            positiveValidMove = False
+        
+        if temp2 != 0 and temp2.color == piece.color:
+            negativeValidMove = False
+
+        if( positiveValidMove ):
+            moves.append( (piece.row + ver_moves, piece.col) )
+        
+        if( negativeValidMove ):
             moves.append( (piece.row - ver_moves, piece.col) )
-            print("ENTREI ", piece.row - ver_moves, piece.col)
