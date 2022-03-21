@@ -112,11 +112,11 @@ class Board:
                 if temp2 != 0 and temp2.color == piece.color:
                     negativeValidMove = False
 
-        if (positiveValidMove):
+        if positiveValidMove and (piece.col + hor_moves < COLS):
             moves.append((piece.row, piece.col + hor_moves))
             # print("ENTREI ", piece.row, piece.col + hor_moves)
 
-        if (negativeValidMove):
+        if negativeValidMove and (piece.col - hor_moves) >= 0:
             moves.append((piece.row, piece.col - hor_moves))
             # print("ENTREI ", piece.row, piece.col - hor_moves)
 
@@ -142,8 +142,8 @@ class Board:
                 if temp2 != 0 and temp2.color == piece.color:
                     negativeValidMove = False
 
-        if (positiveValidMove):
+        if positiveValidMove and (piece.row + ver_moves < ROWS):
             moves.append((piece.row + ver_moves, piece.col))
 
-        if (negativeValidMove):
+        if negativeValidMove and (piece.row - ver_moves >= 0):
             moves.append((piece.row - ver_moves, piece.col))
