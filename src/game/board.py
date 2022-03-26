@@ -14,11 +14,11 @@ class Board:
 
     # Draws the game board, this includes the black and white squares
     def draw_background(self, window):
-        window.fill(WHITE)
+        window.fill(BOARD_COLOR_1)
 
         for row in range(ROWS):
             for col in range(row % 2, ROWS, 2):  # Paint every other square
-                pygame.draw.rect(window, BLACK, (row * SQUARE_SIZE, col * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
+                pygame.draw.rect(window, BOARD_COLOR_2, (row * SQUARE_SIZE, col * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
 
     # Initializes the board, with the pieces on their initial position
     def create_board(self):
@@ -26,10 +26,10 @@ class Board:
             self.board.append([])
             for col in range(COLS):
                 if (col == 0 or col == COLS - 1) and row != 0 and row != ROWS - 1:
-                    self.board[row].append(Piece(row, col, BLUE))
+                    self.board[row].append(Piece(row, col, WHITE))
 
                 elif (row == 0 or row == ROWS - 1) and col != 0 and col != COLS - 1:
-                    self.board[row].append(Piece(row, col, RED))
+                    self.board[row].append(Piece(row, col, BLACK))
 
                 else:
                     self.board[row].append(0)
