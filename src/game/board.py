@@ -101,15 +101,36 @@ class Board:
                 hor_moves += 1          # Count pieces on the horizontal line
             if self.board[i][piece.col] != 0:
                 ver_moves += 1          # Count pieces on the vertical column
-
         # print("posso andar ", hor_moves ," casas na horizontal")
         # print("posso andar ", ver_moves ," casas na vertical")
+
+        diag_botright_moves = 1
+        diag_botleft_moves = 1
+        # top-left
+        for i in range(1, min(piece.col, piece.row)+1):
+            if self.get_piece(piece.row-i, piece.col-i) != 0:
+                diag_botright_moves += 1
+        # bot-right
+        for i in range(1, min(COLS - piece.col, ROWS - piece.row)):
+            if self.get_piece(piece.row+i, piece.col+i) != 0:
+                diag_botright_moves += 1
+        # top-right
+        for i in range(1, min(COLS - piece.col, piece.row) + 1):
+            if self.get_piece(piece.row-i, piece.col+i) != 0:
+                diag_botleft_moves += 1
+        # bot-left
+        for i in range(1, min(piece.col, ROWS - piece.row) + 1):
+            if self.get_piece(piece.row+i, piece.col-i) != 0:
+                diag_botleft_moves += 1
 
         self.move_horizontal(piece, moves, hor_moves)
         self.move_vertical(piece, moves, ver_moves)
 
-        # Missing diagonal movement
-        #print(moves)
+        self.move_bot_right(piece, moves, diag_botright_moves)
+        self.move_bot_left(piece, moves, diag_botleft_moves)
+
+        print(moves)
+
         return moves
 
     # Finds all horizontal valid moves of the piece
@@ -172,6 +193,7 @@ class Board:
 
         if negativeValidMove and (piece.row - ver_moves >= 0):
             moves.append((piece.row - ver_moves, piece.col))
+
             
     def checkWin(self, colorPlayed):
         self.counter = 0
@@ -213,7 +235,60 @@ class Board:
             
         for i in range(8):
             self.dfs( row + incX[i], col + incY[i], searchingColor )
-            
-        
-        
-        
+
+
+    def move_bot_right(self, piece, moves, diag_botright_moves):
+        positiveValidMove = True  # To the bottom right
+        negativeValidMove = True  # To the top left
+        for i in range(1, diag_botright_moves+1):
+            cell_element1 = self.get_piece(piece.row + i, piece.col + i)
+            cell_element2 = self.get_piece(piece.row - i, piece.col - i)
+            if i < diag_botright_moves:
+                if cell_element1 != 0 and piece.color != cell_element1.color:
+                   positiveValidMove = False
+
+                if cell_element2 != 0 and piece.color != cell_element2.color:
+                    negativeValidMove = False
+
+            else:
+                if cell_element1 != 0 and cell_element1.color == piece.color:
+                    positiveValidMove = False
+
+                if cell_element2 != 0 and cell_element2.color == piece.color:
+                    negativeValidMove = False
+
+        if positiveValidMove and (piece.col + diag_botright_moves < COLS) and (piece.row + diag_botright_moves < ROWS):
+            moves.append((piece.row+ diag_botright_moves, piece.col + diag_botright_moves))
+
+        if negativeValidMove and (piece.col - diag_botright_moves >= 0) and (piece.row - diag_botright_moves >= 0):
+            moves.append((piece.row- diag_botright_moves, piece.col - diag_botright_moves))
+
+
+    def move_bot_left(self, piece, moves, diag_botleft_moves):
+        positiveValidMove = True  # To the bottom left
+        negativeValidMove = True  # To the top right
+        for i in range(1, diag_botleft_moves+1):
+            cell_element1 = self.get_piece(piece.row + i, piece.col - i)
+            cell_element2 = self.get_piece(piece.row - i, piece.col + i)
+            if i < diag_botleft_moves: # not final position
+                if cell_element1 != 0 and piece.color != cell_element1.color: # enemy piece
+                   positiveValidMove = False
+
+                if cell_element2 != 0 and piece.color != cell_element2.color: # enemy piece
+                    negativeValidMove = False
+
+            else:
+                if cell_element1 != 0 and cell_element1.color == piece.color:
+                    positiveValidMove = False
+
+                if cell_element2 != 0 and cell_element2.color == piece.color:
+                    negativeValidMove = False
+
+        if positiveValidMove and (piece.col - diag_botleft_moves >= 0) and (piece.row + diag_botleft_moves < ROWS):
+            moves.append((piece.row + diag_botleft_moves, piece.col - diag_botleft_moves))
+
+        if negativeValidMove and (piece.col + diag_botleft_moves < COLS) and (piece.row - diag_botleft_moves >= 0):
+            moves.append((piece.row - diag_botleft_moves, piece.col + diag_botleft_moves))
+
+
+
