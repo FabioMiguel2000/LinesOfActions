@@ -8,7 +8,7 @@ class Board:
     def __init__(self):
         self.board = []
         self.selected_piece = None
-        self.blue_left = self.red_left = 12
+        self.black_left = self.white_left = 12
 
         self.create_board()
 
@@ -49,10 +49,10 @@ class Board:
         self.board[piece.row][piece.col] = 0
 
         if piece != 0:
-            if piece.color == RED:
-                self.red_left -= 1
+            if piece.color == BLACK:
+                self.black_left -= 1
             else:
-                self.blue_left -= 1
+                self.white_left -= 1
 
     # Moves a piece to a new square
     def move(self, piece, row, col):
