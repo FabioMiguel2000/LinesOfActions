@@ -1,6 +1,6 @@
 import pygame
 from .board import Board
-from .constants import RED, BLUE, GREEN, SQUARE_SIZE
+from .constants import *
 
 
 class Game:
@@ -18,20 +18,18 @@ class Game:
     def reset(self):
         self.selected = None       # The current selected piece
         self.board = Board()       # Game board object
-        self.turn = BLUE           # The current player turn
+        self.turn = BLACK           # The current player turn
         self.valid_moves = {}      # List of all valid moves
 
     # Given the row and column clicked by the mouse, depending on the current condition
     # it can either move a piece on the board or select a piece
     def select(self, row, col):
-        #print("SELECT ", row, col)
         if self.selected:                   # piece is already selected
             result = self.move(row, col)    # move piece if it is a valid move
 
             if not result:                  # if not valid move
                 self.selected = None
-                return False
-                # self.select(row, col)       # !!! recursive, something could go wrong
+                self.select(row, col)
 
         piece = self.board.get_piece(row, col)
         if piece != 0 and piece.color == self.turn:     # If valid move and player's turn
@@ -50,7 +48,6 @@ class Game:
             if piece != 0:              # If it is a capture move
                 self.board.remove(piece)
 
-            #print("MOVE")
             self.board.move(self.selected, row, col)    # Moves the piece
             self.change_turn()
 
@@ -68,10 +65,10 @@ class Game:
     # Changes the player turn
     def change_turn(self):
         self.refresh_state()
-        if self.turn == BLUE:
-            self.turn = RED
+        if self.turn == WHITE:
+            self.turn = BLACK
         else:
-            self.turn = BLUE
+            self.turn = WHITE
             
     # Refreshes the state
     def refresh_state(self):
