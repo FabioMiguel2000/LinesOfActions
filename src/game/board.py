@@ -3,12 +3,20 @@ import pygame
 from .constants import *
 from .piece import *
 
+incX = [-1,+1, 0, 0,-1,-1,+1,+1]
+incY = [ 0, 0,-1,+1,-1,+1,-1,+1]  
+
 
 class Board:
+        
     def __init__(self):
         self.board = []
         self.selected_piece = None
         self.black_left = self.white_left = 12
+        
+        self.counter = 0
+        self.maxSoFar = 0
+        self.visited = []
 
         self.create_board()
 
@@ -54,10 +62,27 @@ class Board:
             else:
                 self.white_left -= 1
 
-    # Moves a piece to a new square
+    # Moves a piece to a new square and checks if a player or the other has won
     def move(self, piece, row, col):
         self.board[piece.row][piece.col], self.board[row][col] = self.board[row][col], self.board[piece.row][piece.col]
         piece.move(row, col)
+        
+        pieceCount = self.checkWin(piece.color)
+        if(piece.color== (0,0,0)):#black
+            if pieceCount == self.black_left:
+                print( "BLACK WINS THE GAME" )
+            else:    
+                pieceCount = self.checkWin(WHITE)
+                if pieceCount == self.white_left:
+                    print( "WHITE WINS THE GAME" )
+        
+        else: # foi jogada uma peça branca
+            if pieceCount == self.white_left:
+                    print( "WHITE WINS THE GAME" )
+            else:
+                pieceCount =self.checkWin(BLACK)
+                if pieceCount == self.black_left:
+                    print( "BLACK WINS THE GAME" )
 
     # Returns the piece on the given position, or 0 if it does not exist
     def get_piece(self, row, col):
@@ -84,7 +109,7 @@ class Board:
         self.move_vertical(piece, moves, ver_moves)
 
         # Missing diagonal movement
-        print(moves)
+        #print(moves)
         return moves
 
     # Finds all horizontal valid moves of the piece
@@ -147,3 +172,48 @@ class Board:
 
         if negativeValidMove and (piece.row - ver_moves >= 0):
             moves.append((piece.row - ver_moves, piece.col))
+            
+    def checkWin(self, colorPlayed):
+        self.counter = 0
+        self.maxSoFar = 0
+        self.visited = []
+        
+        for row in range(ROWS):
+            self.visited.append([])
+            for col in range(COLS):
+                self.visited[row].append(False)
+                
+        for row in range(ROWS):
+            for col in range(COLS):
+                tempiece = self.get_piece(row,col) 
+                if tempiece != 0 and tempiece.color == colorPlayed and not self.visited[row][col]:
+                   self.counter = 0
+                   #print(row, col)
+                   self.dfs(row,col, colorPlayed)
+                   
+                # MELHORAR ISTO
+                #nao quero saber a maior, mas sim se apenas existe uma
+                if self.counter > self.maxSoFar:
+                    self.maxSoFar = self.counter
+                    
+        print("HEY I FOUND " , self.maxSoFar, " for ","black" if colorPlayed==(0,0,0) else "white")
+        return self.maxSoFar
+             
+    
+    def dfs(self, row, col, searchingColor):
+        if not (0 <= col < COLS and 0 <= row < ROWS) or self.visited[row][col]: return
+        
+        tempiece = self.get_piece(row,col)
+        if ( tempiece == 0 or tempiece.color !=  searchingColor): return
+        
+        #print(row, col, tempiece.color)
+            
+        self.visited[row][col] = True
+        self.counter+=1
+            
+        for i in range(8):
+            self.dfs( row + incX[i], col + incY[i], searchingColor )
+            
+        
+        
+        
