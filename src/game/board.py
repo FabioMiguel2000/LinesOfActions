@@ -67,22 +67,25 @@ class Board:
         self.board[piece.row][piece.col], self.board[row][col] = self.board[row][col], self.board[piece.row][piece.col]
         piece.move(row, col)
         
-        pieceCount = self.checkWin(piece.color)
-        if(piece.color== (0,0,0)):#black
-            if pieceCount == self.black_left:
-                print( "BLACK WINS THE GAME" )
-            else:    
-                pieceCount = self.checkWin(WHITE)
-                if pieceCount == self.white_left:
-                    print( "WHITE WINS THE GAME" )
-        
-        else: # foi jogada uma peça branca
-            if pieceCount == self.white_left:
-                    print( "WHITE WINS THE GAME" )
-            else:
-                pieceCount =self.checkWin(BLACK)
-                if pieceCount == self.black_left:
-                    print( "BLACK WINS THE GAME" )
+        # pieceCount = self.checkWin(piece.color)
+        # if(piece.color== (0,0,0)):#black
+        #     if pieceCount == self.black_left:
+        #         # returns 1
+        #         print( "BLACK WINS THE GAME" )
+        #
+        #     else:
+        #         pieceCount = self.checkWin(WHITE)
+        #         if pieceCount == self.white_left:
+        #             # returns 2
+        #             print( "WHITE WINS THE GAME" )
+        #
+        # else: # foi jogada uma peça branca
+        #     if pieceCount == self.white_left:
+        #             print( "WHITE WINS THE GAME" )
+        #     else:
+        #         pieceCount =self.checkWin(BLACK)
+        #         if pieceCount == self.black_left:
+        #             print( "BLACK WINS THE GAME" )
 
     # Returns the piece on the given position, or 0 if it does not exist
     def get_piece(self, row, col):
@@ -129,7 +132,7 @@ class Board:
         self.move_bot_right(piece, moves, diag_botright_moves)
         self.move_bot_left(piece, moves, diag_botleft_moves)
 
-        print(moves)
+        # print(moves)
 
         return moves
 
@@ -204,6 +207,8 @@ class Board:
             self.visited.append([])
             for col in range(COLS):
                 self.visited[row].append(False)
+
+        print(self.visited)
                 
         for row in range(ROWS):
             for col in range(COLS):
@@ -212,7 +217,13 @@ class Board:
                    self.counter = 0
                    #print(row, col)
                    self.dfs(row,col, colorPlayed)
-                   
+
+                # if colorPlayed == (0, 0, 0) and self.black_left == self.counter: # Black
+                #     return 1
+                # elif colorPlayed == (255, 255, 255) and self.white_left == self.counter: # White
+                #     return 2
+                # else:
+                #     return -1
                 # MELHORAR ISTO
                 #nao quero saber a maior, mas sim se apenas existe uma
                 if self.counter > self.maxSoFar:
