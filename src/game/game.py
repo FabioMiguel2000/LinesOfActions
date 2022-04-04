@@ -90,7 +90,6 @@ class Game:
             return 1
 
         pieceCount = self.countFirstGroup(self.turn)
-        print(pieceCount)
         if self.turn == BLACK:
             if pieceCount == self.board.black_left:
                 print("BLACK WINS THE GAME")
@@ -111,6 +110,7 @@ class Game:
                 if pieceCount == self.board.black_left:
                     print("BLACK WINS THE GAME")
                     return 1
+        return -1
 
     def countFirstGroup(self, colorPiece):
         self.counter = 0
