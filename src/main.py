@@ -23,9 +23,6 @@ def main():
     clock = pygame.time.Clock()     # Object to help track time
     game = Game(WINDOW)             # Pygame Window
 
-    # piece = board.get_piece(0,1)
-    # 
-
     # Event Loop
     while run:
         clock.tick(FPS)             # Limits the game to run no more than <FPS> frames per second

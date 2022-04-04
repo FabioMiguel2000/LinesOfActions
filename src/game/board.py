@@ -3,17 +3,17 @@ import pygame
 from .constants import *
 from .piece import *
 
-incX = [-1,+1, 0, 0,-1,-1,+1,+1]
-incY = [ 0, 0,-1,+1,-1,+1,-1,+1]  
+incX = [-1, +1, 0, 0, -1, -1, +1, +1]
+incY = [0, 0, -1, +1, -1, +1, -1, +1]
 
 
 class Board:
-        
+
     def __init__(self):
         self.board = []
         self.selected_piece = None
         self.black_left = self.white_left = 12
-        
+
         self.counter = 0
         self.maxSoFar = 0
         self.visited = []
@@ -26,7 +26,8 @@ class Board:
 
         for row in range(ROWS):
             for col in range(row % 2, ROWS, 2):  # Paint every other square
-                pygame.draw.rect(window, BOARD_COLOR_2, (row * SQUARE_SIZE, col * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
+                pygame.draw.rect(window, BOARD_COLOR_2,
+                                 (row * SQUARE_SIZE, col * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
 
     # Initializes the board, with the pieces on their initial position
     def create_board(self):
@@ -66,26 +67,6 @@ class Board:
     def move(self, piece, row, col):
         self.board[piece.row][piece.col], self.board[row][col] = self.board[row][col], self.board[piece.row][piece.col]
         piece.move(row, col)
-        
-        # pieceCount = self.checkWin(piece.color)
-        # if(piece.color== (0,0,0)):#black
-        #     if pieceCount == self.black_left:
-        #         # returns 1
-        #         print( "BLACK WINS THE GAME" )
-        #
-        #     else:
-        #         pieceCount = self.checkWin(WHITE)
-        #         if pieceCount == self.white_left:
-        #             # returns 2
-        #             print( "WHITE WINS THE GAME" )
-        #
-        # else: # foi jogada uma peça branca
-        #     if pieceCount == self.white_left:
-        #             print( "WHITE WINS THE GAME" )
-        #     else:
-        #         pieceCount =self.checkWin(BLACK)
-        #         if pieceCount == self.black_left:
-        #             print( "BLACK WINS THE GAME" )
 
     # Returns the piece on the given position, or 0 if it does not exist
     def get_piece(self, row, col):
@@ -101,29 +82,27 @@ class Board:
         ver_moves = 0
         for i in range(COLS):
             if self.board[piece.row][i] != 0:
-                hor_moves += 1          # Count pieces on the horizontal line
+                hor_moves += 1  # Count pieces on the horizontal line
             if self.board[i][piece.col] != 0:
-                ver_moves += 1          # Count pieces on the vertical column
-        # print("posso andar ", hor_moves ," casas na horizontal")
-        # print("posso andar ", ver_moves ," casas na vertical")
+                ver_moves += 1  # Count pieces on the vertical column
 
         diag_botright_moves = 1
         diag_botleft_moves = 1
         # top-left
-        for i in range(1, min(piece.col, piece.row)+1):
-            if self.get_piece(piece.row-i, piece.col-i) != 0:
+        for i in range(1, min(piece.col, piece.row) + 1):
+            if self.get_piece(piece.row - i, piece.col - i) != 0:
                 diag_botright_moves += 1
         # bot-right
         for i in range(1, min(COLS - piece.col, ROWS - piece.row)):
-            if self.get_piece(piece.row+i, piece.col+i) != 0:
+            if self.get_piece(piece.row + i, piece.col + i) != 0:
                 diag_botright_moves += 1
         # top-right
         for i in range(1, min(COLS - piece.col, piece.row) + 1):
-            if self.get_piece(piece.row-i, piece.col+i) != 0:
+            if self.get_piece(piece.row - i, piece.col + i) != 0:
                 diag_botleft_moves += 1
         # bot-left
         for i in range(1, min(piece.col, ROWS - piece.row) + 1):
-            if self.get_piece(piece.row+i, piece.col-i) != 0:
+            if self.get_piece(piece.row + i, piece.col - i) != 0:
                 diag_botleft_moves += 1
 
         self.move_horizontal(piece, moves, hor_moves)
@@ -132,14 +111,12 @@ class Board:
         self.move_bot_right(piece, moves, diag_botright_moves)
         self.move_bot_left(piece, moves, diag_botleft_moves)
 
-        # print(moves)
-
         return moves
 
     # Finds all horizontal valid moves of the piece
     def move_horizontal(self, piece, moves, hor_moves):
-        positiveValidMove = True    # To the right
-        negativeValidMove = True    # To the left
+        positiveValidMove = True  # To the right
+        negativeValidMove = True  # To the left
         for i in range(1, hor_moves + 1):
             temp1 = self.get_piece(piece.row, piece.col + i)
             temp2 = self.get_piece(piece.row, piece.col - i)
@@ -163,16 +140,14 @@ class Board:
 
         if positiveValidMove and (piece.col + hor_moves < COLS):
             moves.append((piece.row, piece.col + hor_moves))
-            # print("ENTREI ", piece.row, piece.col + hor_moves)
 
         if negativeValidMove and (piece.col - hor_moves) >= 0:
             moves.append((piece.row, piece.col - hor_moves))
-            # print("ENTREI ", piece.row, piece.col - hor_moves)
 
     # Finds all vertical valid moves of the piece
     def move_vertical(self, piece, moves, ver_moves):
-        positiveValidMove = True        # To the bottom
-        negativeValidMove = True        # To the top
+        positiveValidMove = True  # To the bottom
+        negativeValidMove = True  # To the top
 
         for i in range(1, ver_moves + 1):
             temp1 = self.get_piece(piece.row + i, piece.col)
@@ -197,66 +172,54 @@ class Board:
         if negativeValidMove and (piece.row - ver_moves >= 0):
             moves.append((piece.row - ver_moves, piece.col))
 
-            
     def checkWin(self, colorPlayed):
         self.counter = 0
         self.maxSoFar = 0
         self.visited = []
-        
+
         for row in range(ROWS):
             self.visited.append([])
             for col in range(COLS):
                 self.visited[row].append(False)
 
         print(self.visited)
-                
+
         for row in range(ROWS):
             for col in range(COLS):
-                tempiece = self.get_piece(row,col) 
+                tempiece = self.get_piece(row, col)
                 if tempiece != 0 and tempiece.color == colorPlayed and not self.visited[row][col]:
-                   self.counter = 0
-                   #print(row, col)
-                   self.dfs(row,col, colorPlayed)
+                    self.counter = 0
+                    self.dfs(row, col, colorPlayed)
 
-                # if colorPlayed == (0, 0, 0) and self.black_left == self.counter: # Black
-                #     return 1
-                # elif colorPlayed == (255, 255, 255) and self.white_left == self.counter: # White
-                #     return 2
-                # else:
-                #     return -1
                 # MELHORAR ISTO
-                #nao quero saber a maior, mas sim se apenas existe uma
+                # nao quero saber a maior, mas sim se apenas existe uma
                 if self.counter > self.maxSoFar:
                     self.maxSoFar = self.counter
-                    
-        print("HEY I FOUND " , self.maxSoFar, " for ","black" if colorPlayed==(0,0,0) else "white")
+
+        print("HEY I FOUND ", self.maxSoFar, " for ", "black" if colorPlayed == (0, 0, 0) else "white")
         return self.maxSoFar
-             
-    
+
     def dfs(self, row, col, searchingColor):
         if not (0 <= col < COLS and 0 <= row < ROWS) or self.visited[row][col]: return
-        
-        tempiece = self.get_piece(row,col)
-        if ( tempiece == 0 or tempiece.color !=  searchingColor): return
-        
-        #print(row, col, tempiece.color)
-            
-        self.visited[row][col] = True
-        self.counter+=1
-            
-        for i in range(8):
-            self.dfs( row + incX[i], col + incY[i], searchingColor )
 
+        tempiece = self.get_piece(row, col)
+        if tempiece == 0 or tempiece.color != searchingColor: return
+
+        self.visited[row][col] = True
+        self.counter += 1
+
+        for i in range(8):
+            self.dfs(row + incX[i], col + incY[i], searchingColor)
 
     def move_bot_right(self, piece, moves, diag_botright_moves):
         positiveValidMove = True  # To the bottom right
         negativeValidMove = True  # To the top left
-        for i in range(1, diag_botright_moves+1):
+        for i in range(1, diag_botright_moves + 1):
             cell_element1 = self.get_piece(piece.row + i, piece.col + i)
             cell_element2 = self.get_piece(piece.row - i, piece.col - i)
             if i < diag_botright_moves:
                 if cell_element1 != 0 and piece.color != cell_element1.color:
-                   positiveValidMove = False
+                    positiveValidMove = False
 
                 if cell_element2 != 0 and piece.color != cell_element2.color:
                     negativeValidMove = False
@@ -269,23 +232,22 @@ class Board:
                     negativeValidMove = False
 
         if positiveValidMove and (piece.col + diag_botright_moves < COLS) and (piece.row + diag_botright_moves < ROWS):
-            moves.append((piece.row+ diag_botright_moves, piece.col + diag_botright_moves))
+            moves.append((piece.row + diag_botright_moves, piece.col + diag_botright_moves))
 
         if negativeValidMove and (piece.col - diag_botright_moves >= 0) and (piece.row - diag_botright_moves >= 0):
-            moves.append((piece.row- diag_botright_moves, piece.col - diag_botright_moves))
-
+            moves.append((piece.row - diag_botright_moves, piece.col - diag_botright_moves))
 
     def move_bot_left(self, piece, moves, diag_botleft_moves):
         positiveValidMove = True  # To the bottom left
         negativeValidMove = True  # To the top right
-        for i in range(1, diag_botleft_moves+1):
+        for i in range(1, diag_botleft_moves + 1):
             cell_element1 = self.get_piece(piece.row + i, piece.col - i)
             cell_element2 = self.get_piece(piece.row - i, piece.col + i)
-            if i < diag_botleft_moves: # not final position
-                if cell_element1 != 0 and piece.color != cell_element1.color: # enemy piece
-                   positiveValidMove = False
+            if i < diag_botleft_moves:  # not final position
+                if cell_element1 != 0 and piece.color != cell_element1.color:  # enemy piece
+                    positiveValidMove = False
 
-                if cell_element2 != 0 and piece.color != cell_element2.color: # enemy piece
+                if cell_element2 != 0 and piece.color != cell_element2.color:  # enemy piece
                     negativeValidMove = False
 
             else:
@@ -300,6 +262,3 @@ class Board:
 
         if negativeValidMove and (piece.col + diag_botleft_moves < COLS) and (piece.row - diag_botleft_moves >= 0):
             moves.append((piece.row - diag_botleft_moves, piece.col + diag_botleft_moves))
-
-
-
