@@ -25,7 +25,7 @@ def minimax(position, depth, max_player, game):
         best_move = None
         for move in get_all_moves(position, BLACK, game):
             evaluation, temp_move = minimax(move, depth-1, True, game)
-            inEval = min(minEval, evaluation)
+            minEval = min(minEval, evaluation)
             
             if minEval == evaluation:
                 best_move = move
@@ -33,6 +33,11 @@ def minimax(position, depth, max_player, game):
         return minEval, best_move
         
 def simulate_move(piece,move,board,game):
+    delPiece = board.get_piece(move[0], move[1])
+    if( delPiece != 0 ):
+        board.remove(delPiece)
+        
+
     board.move(piece, move[0], move[1])
 
         
