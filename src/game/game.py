@@ -141,3 +141,10 @@ class Game:
         self.counter += 1
         for i in range(8):
             self.dfs(row + incX[i], col + incY[i], colorPiece)
+
+    def get_board(self):
+        return self.board
+    
+    def ai_move(self,board):
+        self.board = board
+        self.change_turn()

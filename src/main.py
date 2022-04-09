@@ -1,6 +1,7 @@
 import pygame
 from game.constants import *
 from game.game import Game
+from minimax.algorithm import minimax
 
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
 
@@ -29,6 +30,18 @@ def main():
     # Event Loop
     while run:
         clock.tick(FPS)             # Limits the game to run no more than <FPS> frames per second
+        
+        if game.turn == WHITE:
+            value, new_board = minimax(game.get_board(), 2, WHITE, game)
+            game.ai_move(new_board)
+        
+        # TODO ## aqui é que fica a logica do endgame
+        # if game.winner() != None:
+        #     print(game.winner())
+        #     run = False) != None:
+        #     print(game.winner())
+        #     run = False
+        
         for event in pygame.event.get():                # Loop through game events
             if event.type == pygame.QUIT:               # EVENT - If window closed, then stop running
                 run = False

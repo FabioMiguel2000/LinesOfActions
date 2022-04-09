@@ -42,8 +42,7 @@ class Board:
                 else:
                     self.board[row].append(0)
 
-                    # Draws everything, board and pieces of the current game state
-
+    # Draws everything, board and pieces of the current game state
     def draw(self, window):
         self.draw_background(window)
         for row in range(ROWS):
@@ -86,6 +85,22 @@ class Board:
         #         pieceCount =self.checkWin(BLACK)
         #         if pieceCount == self.black_left:
         #             print( "BLACK WINS THE GAME" )
+    def winner(self):
+        # TODO
+        return None
+        
+        
+    def evaluate(self):
+        # TODO
+        return 0 
+    
+    def get_all_pieces(self, color):
+        pieces = []
+        for row in self.board:
+            for piece in row:
+                if piece != 0 and piece.color == color:
+                    pieces.append(piece)
+        return pieces
 
     # Returns the piece on the given position, or 0 if it does not exist
     def get_piece(self, row, col):
