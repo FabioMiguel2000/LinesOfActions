@@ -5,10 +5,13 @@ BLACK = (0,0,0)
 WHITE = (255, 255, 255)
 
 
+
+
 # TRUE - MAX Player
 # FALSE = MIN Player
 
-def minimax(position, depth, max_player, game, currentTurn):
+def minimax(position, depth, max_player, game, currentTurn, alpha, beta):
+
     if depth == 0 or position.winner() != None:
         return position.evaluate(game.turn), position
     
@@ -16,9 +19,11 @@ def minimax(position, depth, max_player, game, currentTurn):
         maxEval = float('-inf')
         best_move = None
         for move in get_all_moves(position, currentTurn, game):
-            evaluation, temp_move = minimax(move, depth-1, False, game, currentTurn)
+            evaluation, temp_move = minimax(move, depth-1, False, game, currentTurn, alpha, beta)
             maxEval = max(maxEval, evaluation)
-            
+            alpha = max(alpha, evaluation)
+            if beta <= alpha:
+                break
             if maxEval == evaluation:
                 best_move = move
                 
@@ -28,9 +33,11 @@ def minimax(position, depth, max_player, game, currentTurn):
         minEval = float('inf')
         best_move = None
         for move in get_all_moves(position, changeTurn(currentTurn), game):
-            evaluation, temp_move = minimax(move, depth-1, True, game, currentTurn)
+            evaluation, temp_move = minimax(move, depth-1, True, game, currentTurn, alpha, beta)
             minEval = min(minEval, evaluation)
-            
+            beta = min(beta, evaluation)
+            if beta <= alpha:
+                break
             if minEval == evaluation:
                 best_move = move
                 
@@ -41,10 +48,8 @@ def simulate_move(piece,move,board,game):
     if( delPiece != 0 ):
         board.remove(delPiece)
         
-
     board.move(piece, move[0], move[1])
 
-        
     return board
 
 def get_all_moves(board, color, game):
@@ -60,8 +65,6 @@ def get_all_moves(board, color, game):
             moves.append(new_board)
     
     return moves
-
-
 
 def changeTurn(Turn):
     return WHITE if Turn == BLACK else BLACK
