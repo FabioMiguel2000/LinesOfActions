@@ -8,15 +8,15 @@ WHITE = (255, 255, 255)
 # TRUE - MAX Player
 # FALSE = MIN Player
 
-def minimax(position, depth, max_player, game):
+def minimax(position, depth, max_player, game, currentTurn):
     if depth == 0 or position.winner() != None:
         return position.evaluate(game.turn), position
     
     if max_player:
         maxEval = float('-inf')
         best_move = None
-        for move in get_all_moves(position, WHITE, game):
-            evaluation, temp_move = minimax(move, depth-1, False, game)
+        for move in get_all_moves(position, currentTurn, game):
+            evaluation, temp_move = minimax(move, depth-1, False, game, currentTurn)
             maxEval = max(maxEval, evaluation)
             
             if maxEval == evaluation:
@@ -27,8 +27,8 @@ def minimax(position, depth, max_player, game):
     else:
         minEval = float('inf')
         best_move = None
-        for move in get_all_moves(position, BLACK, game):
-            evaluation, temp_move = minimax(move, depth-1, True, game)
+        for move in get_all_moves(position, changeTurn(currentTurn), game):
+            evaluation, temp_move = minimax(move, depth-1, True, game, currentTurn)
             minEval = min(minEval, evaluation)
             
             if minEval == evaluation:
@@ -60,3 +60,8 @@ def get_all_moves(board, color, game):
             moves.append(new_board)
     
     return moves
+
+
+
+def changeTurn(Turn):
+    return WHITE if Turn == BLACK else BLACK

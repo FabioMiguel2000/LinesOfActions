@@ -9,7 +9,6 @@ pygame.display.set_caption('Lines of Action')
 
 FPS = 60
 
-
 # Receives the position clicked by mouse <pos>, finds out and returns
 # the corresponding row and column clicked in the game board
 def get_row_col_from_mouse(pos):
@@ -37,23 +36,25 @@ def main():
     while run:
         clock.tick(FPS)             # Limits the game to run no more than <FPS> frames per second
         
-        if game.turn == WHITE:
-            value, new_board = minimax(game.get_board(), 2, WHITE, game)
+        # if game.turn == WHITE:
+        #     value, new_board = minimax(game.get_board(), EASY_LEVEL, WHITE, game)
+        #     game.ai_move(new_board)
+
+        if game.turn == WHITE and PLAYER_WHITE == BOT:
+            value, new_board = minimax(game.get_board(), EASY_LEVEL, True, game, WHITE)
             game.ai_move(new_board)
-        
-        # TODO ## aqui é que fica a logica do endgame
-        # if game.winner() != None:
-        #     print(game.winner())
-        #     run = False) != None:
-        #     print(game.winner())
-        #     run = False
+        elif game.turn == BLACK and PLAYER_BLACK == BOT:
+            value, new_board = minimax(game.get_board(), MEDIUM_LEVEL, True, game, BLACK)
+            game.ai_move(new_board)
 
         gameStatus = game.check_gameover()
         if gameStatus != -1:
             print_winner(gameStatus)
+            print(game.countMoves)
             game.reset()
             break   # temp, we do reset later
         
+
         for event in pygame.event.get():                # Loop through game events
             if event.type == pygame.QUIT:               # EVENT - If window closed, then stop running
                 run = False

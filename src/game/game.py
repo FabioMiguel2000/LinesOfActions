@@ -9,6 +9,7 @@ incY = [0, 0, -1, +1, -1, +1, -1, +1]
 class Game:
     def __init__(self, window):
         self.window = window
+        self.countMoves = [0,0]
         self.reset()
 
     # Function to update the game view
@@ -19,10 +20,11 @@ class Game:
 
     # Resets/initializes the game states
     def reset(self):
+        self.countMoves = [0,0]
         self.selected = None  # The current selected piece
         self.board = Board()  # Game board object
         self.turn = BLACK  # The current player turn
-        self.valid_moves = {}  # List of all valid moves
+        self.valid_moves = []  # List of all valid moves
 
     # Given the row and column clicked by the mouse, depending on the current condition
     # it can either move a piece on the board or select a piece
@@ -52,6 +54,7 @@ class Game:
                 self.board.remove(piece)
 
             self.board.move(self.selected, row, col)  # Moves the piece
+            self.incrementMoveCount()
             self.change_turn()
 
         else:
@@ -76,8 +79,8 @@ class Game:
 
     # Refreshes the state
     def refresh_state(self):
-        self.selected = None;
-        self.valid_moves = [];
+        self.selected = None
+        self.valid_moves = []
 
 
     # returns 1 - Black wins
@@ -138,7 +141,11 @@ class Game:
     
     def ai_move(self,board):
         self.board = board
+        self.incrementMoveCount()
         self.change_turn()
 
-
-    
+    def incrementMoveCount(self):
+        if self.turn == BLACK:
+            self.countMoves = [self.countMoves[0] + 1, self.countMoves[1]]
+        else:
+            self.countMoves = [self.countMoves[0], self.countMoves[1] + 1]
