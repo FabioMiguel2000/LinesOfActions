@@ -106,6 +106,26 @@ class Game:
                     return 1
         return -1
 
+    def check_gameover2(self, board):
+        pieceCount = self.countFirstGroup(self.turn)
+        if self.turn == BLACK:
+            if pieceCount == board.black_left:
+                return 1
+
+            else:
+                pieceCount = self.countFirstGroup(WHITE)
+                if pieceCount == board.white_left:
+                    return 2
+
+        else:  # White
+            if pieceCount == board.white_left:
+                return 2
+            else:
+                pieceCount = self.countFirstGroup(BLACK)
+                if pieceCount == board.black_left:
+                    return 1
+        return -1
+
     def countFirstGroup(self, colorPiece):
         self.counter = 0
         self.visited = []

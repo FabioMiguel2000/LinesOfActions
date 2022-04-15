@@ -38,7 +38,7 @@ def main():
             value, new_board = minimax(game.get_board(), EASY_LEVEL, True, game, WHITE, float('-inf'),  float('inf'))
             game.ai_move(new_board)
         elif game.turn == BLACK and PLAYER_BLACK == BOT:
-            value, new_board = minimax(game.get_board(), MEDIUM_LEVEL, True, game, BLACK, float('-inf'),  float('inf'))
+            value, new_board = minimax(game.get_board(), EASY_LEVEL, True, game, BLACK, float('-inf'),  float('inf'))
             game.ai_move(new_board)
 
         gameStatus = game.check_gameover()
@@ -60,6 +60,7 @@ def main():
                 game.select(row, col)
 
         game.update()
+        # pygame.time.wait(1000)
 
     pygame.quit()
 

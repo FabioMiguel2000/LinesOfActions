@@ -10,33 +10,33 @@ WHITE = (255, 255, 255)
 # TRUE - MAX Player
 # FALSE = MIN Player
 
-def minimax(position, depth, max_player, game, currentTurn, alpha, beta):
+def minimax(board, depth, max_player, game, currentTurn, alpha, beta):
 
-    if depth == 0 or position.winner() != None:
-        return position.evaluate(game.turn), position
+    if depth == 0 or game.check_gameover2(board) != -1:
+        return board.evaluate(game.turn), board
     
     if max_player:
         maxEval = float('-inf')
         best_move = None
-        for move in get_all_moves(position, currentTurn, game):
+        for move in get_all_moves(board, currentTurn, game):
             evaluation, temp_move = minimax(move, depth-1, False, game, currentTurn, alpha, beta)
             maxEval = max(maxEval, evaluation)
             alpha = max(alpha, evaluation)
-            if beta <= alpha:
+            if beta < alpha:
                 break
             if maxEval == evaluation:
                 best_move = move
-                
+
         return maxEval, best_move
         
     else:
         minEval = float('inf')
         best_move = None
-        for move in get_all_moves(position, changeTurn(currentTurn), game):
+        for move in get_all_moves(board, changeTurn(currentTurn), game):
             evaluation, temp_move = minimax(move, depth-1, True, game, currentTurn, alpha, beta)
             minEval = min(minEval, evaluation)
             beta = min(beta, evaluation)
-            if beta <= alpha:
+            if beta < alpha:
                 break
             if minEval == evaluation:
                 best_move = move
@@ -59,6 +59,8 @@ def get_all_moves(board, color, game):
         valid_moves = board.get_valid_moves(piece)
         # for move, capturedPiece in valid_moves.items():
         for move in valid_moves:
+            # Discomment if would like to see all the possible branches of minimax
+            # draw_moves(game, board, piece)    
             temp_board = deepcopy(board)
             temp_piece = temp_board.get_piece(piece.row, piece.col)
             new_board = simulate_move(temp_piece, move, temp_board, game)
@@ -68,3 +70,11 @@ def get_all_moves(board, color, game):
 
 def changeTurn(Turn):
     return WHITE if Turn == BLACK else BLACK
+
+
+def draw_moves(game, board, piece):
+    valid_moves = board.get_valid_moves(piece)
+    board.draw(game.window)
+    pygame.draw.circle(game.window, (0,255,0), (piece.x, piece.y), 50, 5)
+    game.draw_valid_moves(valid_moves)
+    pygame.display.update()

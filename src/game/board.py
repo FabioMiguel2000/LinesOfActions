@@ -61,39 +61,23 @@ class Board:
             else:
                 self.white_left -= 1
 
+    def winner(self):
+        # TODO
+        return None
+
     # Moves a piece to a new square and checks if a player or the other has won
     def move(self, piece, row, col):
         self.board[piece.row][piece.col], self.board[row][col] = self.board[row][col], self.board[piece.row][piece.col]
         piece.move(row, col)
         
-        # pieceCount = self.checkWin(piece.color)
-        # if(piece.color== (0,0,0)):#black
-        #     if pieceCount == self.black_left:
-        #         # returns 1
-        #         print( "BLACK WINS THE GAME" )
-        #
-        #     else:
-        #         pieceCount = self.checkWin(WHITE)
-        #         if pieceCount == self.white_left:
-        #             # returns 2
-        #             print( "WHITE WINS THE GAME" )
-        #
-        # else: # foi jogada uma peça branca
-        #     if pieceCount == self.white_left:
-        #             print( "WHITE WINS THE GAME" )
-        #     else:
-        #         pieceCount =self.checkWin(BLACK)
-        #         if pieceCount == self.black_left:
-        #             print( "BLACK WINS THE GAME" )
-    def winner(self):
-        # TODO
-        return None
-        
-        
     def evaluate(self, turn):
         
         pieces = self.get_all_pieces(turn)
         value = self.centralisation(pieces)
+        print("Centralization value: ", value)
+        concentrationVal = self.concentration(pieces)
+        value += concentrationVal
+        print("concentration value: ", concentrationVal)
 
         return value
 
@@ -115,7 +99,22 @@ class Board:
 
         return sum
 
+    def concentration(self, pieces):
+        centerRow = 0
+        centerCol = 0
+        for piece in pieces:
+            centerRow += piece.row
+            centerCol += piece.col
+        
+        centerRow /= len(pieces)
+        centerCol /= len(pieces)
+        totalDistance = 0
+        for piece in pieces:
+            totalDistance += max(abs(centerRow-piece.row), abs(centerCol-piece.col))
 
+        averageDistance = totalDistance/len(pieces)
+
+        return -100*averageDistance
     
     def get_all_pieces(self, color):
         pieces = []
