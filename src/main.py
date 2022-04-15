@@ -19,6 +19,12 @@ def get_row_col_from_mouse(pos):
     return row, col
 
 
+def print_winner(val):
+    if val == 1:
+        print("BLACK WINS!")
+    else:
+        print("WHITE WINS")
+
 def main():
     run = True                      # Game Loop Flag
     clock = pygame.time.Clock()     # Object to help track time
@@ -41,6 +47,12 @@ def main():
         #     run = False) != None:
         #     print(game.winner())
         #     run = False
+
+        gameStatus = game.check_gameover()
+        if gameStatus != -1:
+            print_winner(gameStatus)
+            game.reset()
+            break   # temp, we do reset later
         
         for event in pygame.event.get():                # Loop through game events
             if event.type == pygame.QUIT:               # EVENT - If window closed, then stop running

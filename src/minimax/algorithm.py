@@ -4,9 +4,13 @@ import pygame
 BLACK = (0,0,0)
 WHITE = (255, 255, 255)
 
+
+# TRUE - MAX Player
+# FALSE = MIN Player
+
 def minimax(position, depth, max_player, game):
     if depth == 0 or position.winner() != None:
-        return position.evaluate(), position
+        return position.evaluate(game.turn), position
     
     if max_player:
         maxEval = float('-inf')

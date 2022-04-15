@@ -52,10 +52,6 @@ class Game:
                 self.board.remove(piece)
 
             self.board.move(self.selected, row, col)  # Moves the piece
-            game_condition = self.check_gameover()  # Checks if game over
-            if game_condition != -1:
-                self.reset()
-                return False
             self.change_turn()
 
         else:
@@ -83,32 +79,27 @@ class Game:
         self.selected = None;
         self.valid_moves = [];
 
-    def check_gameover(self):
-        if self.board.white_left == 1:  # white left with 1 piece, white wins
-            return 2
-        elif self.board.black_left == 1:  # black left with 1 piece, black wins
-            return 1
 
+    # returns 1 - Black wins
+    # returns 2 - White wins
+    # returns -1 - Game continues
+    def check_gameover(self):
         pieceCount = self.countFirstGroup(self.turn)
         if self.turn == BLACK:
             if pieceCount == self.board.black_left:
-                print("BLACK WINS THE GAME")
                 return 1
 
             else:
                 pieceCount = self.countFirstGroup(WHITE)
                 if pieceCount == self.board.white_left:
-                    print("WHITE WINS THE GAME")
                     return 2
 
         else:  # White
             if pieceCount == self.board.white_left:
-                print("WHITE WINS THE GAME")
                 return 2
             else:
                 pieceCount = self.countFirstGroup(BLACK)
                 if pieceCount == self.board.black_left:
-                    print("BLACK WINS THE GAME")
                     return 1
         return -1
 
@@ -148,3 +139,6 @@ class Game:
     def ai_move(self,board):
         self.board = board
         self.change_turn()
+
+
+    

@@ -1,5 +1,5 @@
-from re import S
 import pygame
+
 from .constants import *
 from .piece import *
 
@@ -90,9 +90,32 @@ class Board:
         return None
         
         
-    def evaluate(self):
-        # TODO
-        return 0 
+    def evaluate(self, turn):
+        
+        pieces = self.get_all_pieces(turn)
+        value = self.centralisation(pieces)
+
+        return value
+
+
+    def centralisation(self, pieces):
+        pieceSquareTable = [[-80, -25, -20, -20, -20, -20, -25, -80],
+            [-25,  10,  10,  10,  10,  10,  10, -25],
+                [-20,  10,  25,  25,  25,  25,  10, -20],
+                [-20,  10,  25,  50,  50,  25,  10, -20],
+                [-20,  10,  25,  50,  50,  25,  10, -20],
+                [-20,  10,  25,  25,  25,  25,  10, -20],
+                [-25,  10,  10,  10,  10,  10,  10, -25],
+                [-80, -25, -20, -20, -20, -20, -25, -80]]
+
+        sum = 0
+
+        for piece in pieces:
+            sum += pieceSquareTable[piece.row][piece.col]
+
+        return sum
+
+
     
     def get_all_pieces(self, color):
         pieces = []
