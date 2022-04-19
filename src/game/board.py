@@ -1,4 +1,5 @@
 import pygame
+import random
 
 from .constants import *
 from .piece import *
@@ -74,10 +75,11 @@ class Board:
         
         pieces = self.get_all_pieces(turn)
         value = self.centralisation(pieces)
-        print("Centralization value: ", value)
+        # print("Centralization value: ", value)
         concentrationVal = self.concentration(pieces)
-        value += concentrationVal
-        print("concentration value: ", concentrationVal)
+        randomVal = random.randint(0,5)
+        value += concentrationVal + randomVal
+        # print("concentration value: ", concentrationVal)
 
         return value
 

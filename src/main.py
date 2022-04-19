@@ -35,7 +35,7 @@ def main():
         clock.tick(FPS)             # Limits the game to run no more than <FPS> frames per second
 
         if game.turn == WHITE and PLAYER_WHITE == BOT:
-            value, new_board = minimax(game.get_board(), EASY_LEVEL, True, game, WHITE, float('-inf'),  float('inf'))
+            value, new_board = minimax(game.get_board(), MEDIUM_LEVEL, True, game, WHITE, float('-inf'),  float('inf'))
             game.ai_move(new_board)
         elif game.turn == BLACK and PLAYER_BLACK == BOT:
             value, new_board = minimax(game.get_board(), EASY_LEVEL, True, game, BLACK, float('-inf'),  float('inf'))
