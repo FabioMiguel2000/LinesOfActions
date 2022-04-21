@@ -29,7 +29,7 @@ def minimax(board, depth, max_player, game, currentTurn, alpha, beta):
 
         return maxEval, best_move
         
-    else:
+    else: # min_player
         minEval = float('inf')
         best_move = None
         for move in get_all_moves(board, changeTurn(currentTurn), game):

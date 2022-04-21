@@ -106,6 +106,7 @@ class Game:
                     return 1
         return -1
 
+    #Function Overloading
     def check_gameover2(self, board):
         pieceCount = self.countFirstGroup(self.turn)
         if self.turn == BLACK:
