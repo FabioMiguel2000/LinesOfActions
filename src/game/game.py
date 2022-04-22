@@ -90,43 +90,44 @@ class Game:
         pieceCount = self.countFirstGroup(self.turn)
         if self.turn == BLACK:
             if pieceCount == self.board.black_left:
-                return 1
+                return BLACK_WINS
 
             else:
                 pieceCount = self.countFirstGroup(WHITE)
                 if pieceCount == self.board.white_left:
-                    return 2
+                    return WHITE_WINS
 
         else:  # White
             if pieceCount == self.board.white_left:
-                return 2
+                return WHITE_WINS
             else:
                 pieceCount = self.countFirstGroup(BLACK)
                 if pieceCount == self.board.black_left:
-                    return 1
-        return -1
+                    return BLACK_WINS
+        return GAME_CONTINUE
 
-    #Function Overloading
+    # Function Overloading
     def check_gameover2(self, board):
         pieceCount = self.countFirstGroup(self.turn)
         if self.turn == BLACK:
             if pieceCount == board.black_left:
-                return 1
+                return BLACK_WINS
 
             else:
                 pieceCount = self.countFirstGroup(WHITE)
                 if pieceCount == board.white_left:
-                    return 2
+                    return WHITE_WINS
 
         else:  # White
             if pieceCount == board.white_left:
-                return 2
+                return WHITE_WINS
             else:
                 pieceCount = self.countFirstGroup(BLACK)
                 if pieceCount == board.black_left:
-                    return 1
-        return -1
+                    return BLACK_WINS
+        return GAME_CONTINUE
 
+    # Finds the size of the first connected pieces of the provided color 
     def countFirstGroup(self, colorPiece):
         self.counter = 0
         self.visited = []
@@ -145,7 +146,7 @@ class Game:
                     return self.counter
         return self.counter
 
-
+    # Using DFS to search same color adjacent pieces on the board
     def dfs(self, row, col, colorPiece):
         if not (0 <= col < COLS and 0 <= row < ROWS) or self.visited[row][col]: return
 
@@ -157,14 +158,17 @@ class Game:
         for i in range(8):
             self.dfs(row + incX[i], col + incY[i], colorPiece)
 
+    # Getter function for board
     def get_board(self):
         return self.board
     
+    # Function to replace current board with new board provided by the AI
     def ai_move(self,board):
         self.board = board
         self.incrementMoveCount()
         self.change_turn()
 
+    # Update the moves made by the pieces, for final result output
     def incrementMoveCount(self):
         if self.turn == BLACK:
             self.countMoves = [self.countMoves[0] + 1, self.countMoves[1]]

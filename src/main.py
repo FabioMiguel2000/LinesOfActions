@@ -15,7 +15,7 @@ FPS = 60
 
 BOT_WHITE = 0
 BOT_BLACK = 0
-NUMBER_OF_PLAYS = 10
+NUMBER_OF_PLAYS = 1
 
 # Receives the position clicked by mouse <pos>, finds out and returns
 # the corresponding row and column clicked in the game board
@@ -25,14 +25,7 @@ def get_row_col_from_mouse(pos):
     col = x // SQUARE_SIZE
     return row, col
 
-
-def print_winner(val):
-    if val == 1:
-        print("BLACK WINS!")
-    else:
-        print("WHITE WINS")
-
-
+# Receives the arguments passed from the command line and sets the game mode
 def parse_args(args):
     global BOT_WHITE
     global BOT_BLACK
@@ -40,26 +33,33 @@ def parse_args(args):
 
     if len(args) != 4 and len(args) != 3:
         return False
-    if args[1] == 'bot-easy':
+    if args[1] == '-l1':
         BOT_WHITE = EASY_LEVEL
-    elif args[1] == 'bot-medium':
+    elif args[1] == '-l2':
         BOT_WHITE = MEDIUM_LEVEL
-    elif args[1] == 'human':
+    elif args[1] == '-l3':
+        BOT_WHITE = HARD_LEVEL
+    elif args[1] == '-h':
         BOT_WHITE = -1
     else:
         return False
 
-    if args[2] == 'bot-easy':
+    if args[2] == '-l1':
         BOT_BLACK = EASY_LEVEL
-    elif args[2] == 'bot-medium':
+    elif args[2] == '-l2':
         BOT_BLACK = MEDIUM_LEVEL
-    elif args[2] == 'human':
+    elif args[1] == '-l3':
+        BOT_BLACK = HARD_LEVEL
+    elif args[2] == '-h':
         BOT_BLACK = -1
     else:
         return False
     
     if len(args) == 4:
-        NUMBER_OF_PLAYS = int(args[3])
+        if int(args[3]) > 0 and int(args[3]) < 1000:
+            NUMBER_OF_PLAYS = int(args[3])
+        else:
+            return False
 
     return True
     
@@ -67,7 +67,7 @@ def parse_args(args):
 
 def main():
     if not(parse_args(sys.argv)):
-        print("usage: main.py <WhitePlayer> <BlackPlayer> <NumberOfPlays>\nBotPlayer: <bot><level> ex: bot-easy for easy level bot")
+        print("\nUsage: main.py <WhitePlayer> <BlackPlayer> [NGames]\n\n\n\t<WhitePlayer> and <BlackPlayer> options: \n\t\t-h : For Human Player \n\t\t-l1 : For Bot Player Easy Level, \n\t\t-l2 : For Bot Player Medium Level, \n\t\t-l3 : For Bot Player Hard Level\n\n\t[NGames] options: \n\t\t[1-1000] default=10 : Number of games to play, OPTIONAL\n\n\tex: main.py -l1 -h 30\n")
         return
 
     run = True                      # Game Loop Flag
@@ -92,9 +92,9 @@ def main():
             game.ai_move(new_board)
 
         gameStatus = game.check_gameover()
-        if gameStatus != -1:
-            # print_winner(gameStatus)
-            if gameStatus == 1:
+        
+        if gameStatus != GAME_CONTINUE:
+            if gameStatus == BLACK_WINS:
                 print("BLACK WINS!")
                 blackwins +=1
             else:
@@ -102,7 +102,7 @@ def main():
                 whitewins +=1
             print(game.countMoves)
             game.update()
-            pygame.image.save(WINDOW, "endGame.png" )
+            # pygame.image.save(WINDOW, "endGame.png" )
             counter +=1
             game.reset()
 
@@ -117,9 +117,8 @@ def main():
                 game.select(row, col)
 
         game.update()
-        # pygame.time.wait(1000)
 
-    print("FINAL RESULT: ", whitewins, "-", blackwins, "(White-Black)")
+    print("\nFINAL RESULT: ", whitewins, "-", blackwins, "(White-Black)\n")
     pygame.quit()
 
 

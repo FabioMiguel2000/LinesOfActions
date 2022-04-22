@@ -63,9 +63,6 @@ class Board:
             else:
                 self.white_left -= 1
 
-    # def winner(self):
-    #     # TODO
-    #     return None
 
     # Moves a piece to a new square and checks if a player or the other has won
     def move(self, piece, row, col):
@@ -87,19 +84,19 @@ class Board:
         return 0
 
     #       ------------ Heuristic Evaluation Methods ---------------
+
+    # Evaluator function, which evaluates the current board with game heuristics
     def evaluate(self, turn):
-        
         pieces = self.get_all_pieces(turn)
         value = self.centralisation(pieces)
-        # print("Centralization value: ", value)
         value += self.maxGroupSize(turn) * 1000
         concentrationVal = self.concentration(pieces)
         randomVal = random.randint(0,5)
         value += concentrationVal + randomVal
-        # print("concentration value: ", concentrationVal)
 
         return value
 
+    # Heuristic function - centralisation
     def centralisation(self, pieces):
         pieceSquareTable = [[-80, -25, -20, -20, -20, -20, -25, -80],
             [-25,  10,  10,  10,  10,  10,  10, -25],
@@ -117,6 +114,7 @@ class Board:
 
         return sum
 
+    # Heuristic function - concentration
     def concentration(self, pieces):
         centerRow = 0
         centerCol = 0
@@ -135,6 +133,7 @@ class Board:
 
         return -100*averageDistance
 
+    # Heuristic function - largest connected pieces size
     def maxGroupSize(self, turn):
         self.counter = 0
         self.maxSoFar = 0
@@ -150,15 +149,10 @@ class Board:
                 tempiece = self.get_piece(row,col) 
                 if tempiece != 0 and tempiece.color == turn and not self.visited[row][col]:
                    self.counter = 0
-                   #print(row, col)
                    self.dfs(row,col, turn)
 
-                # MELHORAR ISTO
-                #nao quero saber a maior, mas sim se apenas existe uma
-                # if self.counter > self.maxSoFar:
-                #     self.maxSoFar = self.counter
                 self.maxSoFar = max(self.counter, self.maxSoFar)
-        # print("HEY I FOUND " , self.maxSoFar, " for ","black" if colorPlayed==(0,0,0) else "white")
+
         return self.maxSoFar
 
     def dfs(self, row, col, colorPiece):

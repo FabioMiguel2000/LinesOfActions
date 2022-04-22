@@ -5,11 +5,6 @@ BLACK = (0,0,0)
 WHITE = (255, 255, 255)
 
 
-
-
-# TRUE - MAX Player
-# FALSE = MIN Player
-
 def minimax(board, depth, max_player, game, currentTurn, alpha, beta):
 
     if depth == 0 or game.check_gameover2(board) != -1:

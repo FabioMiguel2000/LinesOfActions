@@ -13,12 +13,16 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 GREY = (128,128,128)
+
+
+# BOT LEVELS, the number represents the minimax algorithm DEPTH
 EASY_LEVEL = 2
 MEDIUM_LEVEL = 3
 HARD_LEVEL = 4
 
-BOT = 0
-HUMAN = 1
-PLAYER_WHITE = BOT
-PLAYER_BLACK = BOT
+# GAMESTATES
+GAME_CONTINUE = -1
+BLACK_WINS = 1
+WHITE_WINS = 2
+
 
