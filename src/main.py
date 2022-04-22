@@ -48,7 +48,7 @@ def parse_args(args):
         BOT_BLACK = EASY_LEVEL
     elif args[2] == '-l2':
         BOT_BLACK = MEDIUM_LEVEL
-    elif args[1] == '-l3':
+    elif args[2] == '-l3':
         BOT_BLACK = HARD_LEVEL
     elif args[2] == '-h':
         BOT_BLACK = -1
@@ -92,7 +92,7 @@ def main():
             game.ai_move(new_board)
 
         gameStatus = game.check_gameover()
-        
+
         if gameStatus != GAME_CONTINUE:
             if gameStatus == BLACK_WINS:
                 print("BLACK WINS!")
