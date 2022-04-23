@@ -81,7 +81,7 @@ def main():
     # Event Loop
     while run and (counter < NUMBER_OF_PLAYS):
         clock.tick(FPS)             # Limits the game to run no more than <FPS> frames per second
-
+        game.update()
         if game.turn == WHITE and BOT_WHITE != -1:
             # print("WHITE:", BOT_WHITE)
             value, new_board = minimax(game.get_board(), BOT_WHITE, True, game, WHITE, float('-inf'),  float('inf'))
@@ -115,8 +115,6 @@ def main():
                 row, col = get_row_col_from_mouse(pos)
 
                 game.select(row, col)
-
-        game.update()
 
     print("\nFINAL RESULT: ", whitewins, "-", blackwins, "(White-Black)\n")
     pygame.quit()
