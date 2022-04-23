@@ -4,6 +4,12 @@ import pygame
 BLACK = (0,0,0)
 WHITE = (255, 255, 255)
 
+nodes = 0
+
+def increment_node():
+    global nodes
+    nodes +=1
+
 
 def minimax(board, depth, max_player, game, currentTurn, alpha, beta):
 
@@ -14,11 +20,12 @@ def minimax(board, depth, max_player, game, currentTurn, alpha, beta):
         maxEval = float('-inf')
         best_move = None
         for move in get_all_moves(board, currentTurn, game):
+            increment_node()
             evaluation, temp_move = minimax(move, depth-1, False, game, currentTurn, alpha, beta)
             maxEval = max(maxEval, evaluation)
-            alpha = max(alpha, evaluation)
-            if beta < alpha:
-                break
+            # alpha = max(alpha, evaluation)
+            # if beta < alpha:
+            #     break
             if maxEval == evaluation:
                 best_move = move
 
@@ -28,11 +35,12 @@ def minimax(board, depth, max_player, game, currentTurn, alpha, beta):
         minEval = float('inf')
         best_move = None
         for move in get_all_moves(board, changeTurn(currentTurn), game):
+            increment_node()
             evaluation, temp_move = minimax(move, depth-1, True, game, currentTurn, alpha, beta)
             minEval = min(minEval, evaluation)
-            beta = min(beta, evaluation)
-            if beta < alpha:
-                break
+            # beta = min(beta, evaluation)
+            # if beta < alpha:
+            #     break
             if minEval == evaluation:
                 best_move = move
                 

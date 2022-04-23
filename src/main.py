@@ -1,9 +1,11 @@
 from pickle import FALSE, TRUE
 import pygame
 import sys
+import time
 from game.constants import *
 from game.game import Game
 from minimax.algorithm import minimax
+
 
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
 
@@ -78,7 +80,12 @@ def main():
     whitewins= 0
 
     counter = 0
+
+
+    totalmoves = 0
     # Event Loop
+    start = time.time()
+
     while run and (counter < NUMBER_OF_PLAYS):
         clock.tick(FPS)             # Limits the game to run no more than <FPS> frames per second
         game.update()
@@ -103,6 +110,7 @@ def main():
             print(game.countMoves)
             game.update()
             # pygame.image.save(WINDOW, "endGame.png" )
+            totalmoves = game.countMoves[0] + game.countMoves[1]
             counter +=1
             game.reset()
 
@@ -115,8 +123,14 @@ def main():
                 row, col = get_row_col_from_mouse(pos)
 
                 game.select(row, col)
+    end = time.time()
+    
 
     print("\nFINAL RESULT: ", whitewins, "-", blackwins, "(White-Black)\n")
+    print("Time elapsed: ", end - start, "\nTime per move: ", (end - start) / totalmoves)
+    from minimax.algorithm import nodes
+    print("\nNodes per move: ", (nodes) / totalmoves)
+
     pygame.quit()
 
 
