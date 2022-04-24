@@ -14,6 +14,9 @@ GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 GREY = (128,128,128)
 
+# Flag to decide if alpha-beta pruning should be used in minimax algorithm
+ALPHA_BETA = True
+
 
 # BOT LEVELS, the number represents the minimax algorithm DEPTH
 EASY_LEVEL = 2

@@ -64,7 +64,7 @@ class Board:
                 self.white_left -= 1
 
 
-    # Moves a piece to a new square and checks if a player or the other has won
+    # Moves a piece to a new square
     def move(self, piece, row, col):
         self.board[piece.row][piece.col], self.board[row][col] = self.board[row][col], self.board[piece.row][piece.col]
         piece.move(row, col)
@@ -131,7 +131,7 @@ class Board:
 
         averageDistance = totalDistance/len(pieces)
 
-        return -100*averageDistance
+        return -10*averageDistance
 
     # Heuristic function - largest connected pieces size
     def maxGroupSize(self, turn):

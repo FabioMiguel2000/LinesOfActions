@@ -1,5 +1,6 @@
 from copy import deepcopy
 import pygame
+from game.constants import ALPHA_BETA
 
 BLACK = (0,0,0)
 WHITE = (255, 255, 255)
@@ -23,9 +24,10 @@ def minimax(board, depth, max_player, game, currentTurn, alpha, beta):
             increment_node()
             evaluation, temp_move = minimax(move, depth-1, False, game, currentTurn, alpha, beta)
             maxEval = max(maxEval, evaluation)
-            # alpha = max(alpha, evaluation)
-            # if beta < alpha:
-            #     break
+            if ALPHA_BETA:
+                alpha = max(alpha, evaluation)
+                if beta < alpha:
+                    break
             if maxEval == evaluation:
                 best_move = move
 
@@ -38,9 +40,10 @@ def minimax(board, depth, max_player, game, currentTurn, alpha, beta):
             increment_node()
             evaluation, temp_move = minimax(move, depth-1, True, game, currentTurn, alpha, beta)
             minEval = min(minEval, evaluation)
-            # beta = min(beta, evaluation)
-            # if beta < alpha:
-            #     break
+            if ALPHA_BETA:
+                beta = min(beta, evaluation)
+                if beta < alpha:
+                    break
             if minEval == evaluation:
                 best_move = move
                 
